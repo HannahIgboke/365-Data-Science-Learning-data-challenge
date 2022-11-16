@@ -1,0 +1,66 @@
+-- Data source 1
+
+SELECT course_title, 
+	   ROUND(SUM(minutes_watched), 1) AS total_mins_watched, 
+	   ROUND(AVG(minutes_watched), 2) AS avg_mins_watched, 
+     COUNT(course_rating) AS rating_count, 
+     ROUND(AVG(course_rating),1) AS avg_rating
+FROM 365_course_info AS ci
+INNER JOIN 365_student_learning AS sl
+   ON ci.course_id = sl.course_id
+INNER JOIN 365_course_ratings AS cr
+    ON ci.course_id = cr.course_id
+GROUP BY course_title
+ORDER BY course_title;
+
+-- Data source 2
+
+SELECT DISTINCT(si.student_id), 
+	     date_registered, 
+	     student_country, 
+       date_purchased,
+	     CASE WHEN engagement_lessons = 1 OR engagement_quizzes = 1 OR engagement_exams = 1 THEN 'Onboard'
+            ELSE 'Not onboard' END AS 'User status',
+       
+       CASE WHEN date_purchased BETWEEN '2022-09-20' AND '2022-10-20' OR (purchase_type = 'Annual') THEN 'Paid'
+			      WHEN date_purchased < '2022-09-20' THEN 'Free'
+            END AS 'User type',
+       
+       CASE WHEN purchase_type = 'Annual' THEN 'Annual'
+			      WHEN purchase_type = 'Monthly' THEN 'Monthly'
+            WHEN purchase_type = 'Quarterly' THEN 'Quarterly'
+			      END AS 'Subscription_type'
+FROM 365_student_info AS si
+INNER JOIN 365_student_engagement AS se
+	  ON si.student_id = se.student_id
+INNER JOIN 365_student_purchases AS sp
+	  ON si.student_id = sp.student_id
+ORDER BY si.student_id;
+
+-- Data source 3
+
+SELECT DISTINCT(sl.student_id), 
+       course_id,
+       minutes_watched,
+       date_watched,
+       date_registered,
+       student_country,
+       CASE WHEN engagement_lessons = 1 OR engagement_quizzes = 1 OR engagement_exams = 1 THEN 'Onboard'
+       ELSE 'Not onboard' END AS 'User status',
+       
+       CASE WHEN date_purchased BETWEEN '2022-09-20' AND '2022-10-20' OR (purchase_type = 'Annual') THEN 'Paid'
+			      WHEN date_purchased < '2022-09-20' THEN 'Free'
+            END AS 'User type',
+       
+	   CASE WHEN purchase_type = 'Annual' THEN 'Annual'
+			    WHEN purchase_type = 'Monthly' THEN 'Monthly'
+          WHEN purchase_type = 'Quarterly' THEN 'Quarterly'
+          ELSE 'Free' END AS 'Subscription_type'
+FROM 365_student_learning AS sl
+INNER JOIN 365_student_info AS si
+	ON sl.student_id = si.student_id
+INNER JOIN 365_student_engagement AS se
+	ON si.student_id = se.student_id
+INNER JOIN 365_student_purchases AS sp
+	ON si.student_id = sp.student_id
+ORDER BY student_id;
