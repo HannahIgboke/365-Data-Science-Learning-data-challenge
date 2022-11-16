@@ -22,7 +22,7 @@ The questions below form the basis for my analysis:
 7. Which are the countries with the most students registered? Does this number scale proportionally with the number of minutes watched per country?
 
 # Tools used for Analysis
-Data preparation anD analysis: Structured Query Language(SQL)
+Data preparation and analysis: Structured Query Language(SQL)
 
 Data visualization: Microsoft Power BI
 
