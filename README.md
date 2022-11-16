@@ -26,4 +26,4 @@ Data preparation and analysis: Structured Query Language(SQL)
 
 Data visualization: Microsoft Power BI
 
-Find full documentation here:
+Find full documentation here: https://medium.com/@danielhannah663/365-data-science-learning-data-challenge-my-analysis-fba344b576e2
